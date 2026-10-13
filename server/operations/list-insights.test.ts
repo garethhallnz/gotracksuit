@@ -23,7 +23,7 @@ describe("listing insights in the database", () => {
     withDB((fixture) => {
       const insights: Insight[] = [
         { id: 1, brand: 0, createdAt: new Date(), text: "1" },
-        { id: 2, brand: 0, createdAt: new Date(), text: "2" },
+        { id: 2, brand: 0, createdAt: new Date(), text: "Don't" },
         { id: 3, brand: 1, createdAt: new Date(), text: "3" },
         { id: 4, brand: 4, createdAt: new Date(), text: "4" },
       ];
