@@ -1,6 +1,6 @@
 import { expect } from "@std/expect";
 import { beforeAll, describe, it } from "@std/testing/bdd";
-import type { Insight } from "$models/insight.ts";
+import type { Insight } from "@suittracker/lib/schemas/insight";
 import { withDB } from "../testing.ts";
 import createInsight from "./create-insight.ts";
 

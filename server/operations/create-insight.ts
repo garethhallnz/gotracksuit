@@ -1,4 +1,4 @@
-import type { Insight, NewInsight } from "$models/insight.ts";
+import type { Insight, NewInsight } from "@suittracker/lib/schemas/insight";
 import type { HasDBClient } from "../shared.ts";
 import type * as insightsTable from "$tables/insights.ts";
 

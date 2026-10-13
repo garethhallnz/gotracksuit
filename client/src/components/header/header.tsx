@@ -3,7 +3,7 @@ import { Button } from "../button/button.tsx";
 // @ts-types="../../types/css-module.d.ts"
 import styles from "./header.module.css";
 import { AddInsight } from "../add-insight/add-insight.tsx";
-import type { NewInsight } from "../../schemas/insight.ts";
+import type { NewInsight } from "@suittracker/lib/schemas/insight";
 
 export const HEADER_TEXT = "Suit Tracker Insights";
 

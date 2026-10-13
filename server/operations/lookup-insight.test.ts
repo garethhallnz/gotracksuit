@@ -1,7 +1,7 @@
 import { beforeAll, describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { withDB } from "../testing.ts";
-import type { Insight } from "$models/insight.ts";
+import type { Insight } from "@suittracker/lib/schemas/insight";
 import lookupInsight from "./lookup-insight.ts";
 
 describe("listing insights in the database", () => {

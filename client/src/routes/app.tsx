@@ -5,7 +5,7 @@ import { Insights } from "../components/insights/insights.tsx";
 import { HttpError, request } from "../lib/request.ts";
 // @ts-types="../types/css-module.d.ts"
 import styles from "./app.module.css";
-import { Insight, type NewInsight } from "../schemas/insight.ts";
+import { Insight, type NewInsight } from "@suittracker/lib/schemas/insight";
 
 type Status = "loading" | "ready" | "load-failed" | "delete-failed";
 
