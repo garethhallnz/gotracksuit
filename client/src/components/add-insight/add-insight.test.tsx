@@ -7,6 +7,9 @@ const submitInsight = (onAdd: () => Promise<void>) => {
   const onClose = vi.fn();
   render(<AddInsight open onClose={onClose} onAdd={onAdd} />);
 
+  fireEvent.change(screen.getByRole("combobox", { name: "Brand" }), {
+    target: { value: "2" },
+  });
   fireEvent.change(screen.getByRole("textbox", { name: "Insight" }), {
     target: { value: "Socks with sandals" },
   });

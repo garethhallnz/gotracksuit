@@ -45,6 +45,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
     <Modal {...props} title="Add a new insight" onClose={close}>
       <form className={styles.form} onSubmit={addInsight}>
         <label className={styles.field}>
+          Brand
           <select
             className={styles["field-input"]}
             value={brand}
