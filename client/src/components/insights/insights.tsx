@@ -1,6 +1,7 @@
 import { Trash2Icon } from "lucide-react";
 import { BRANDS } from "../../lib/consts.ts";
 import { cx } from "../../lib/cx.ts";
+import { InlineConfirm } from "../inline-confirm/inline-confirm.tsx";
 import styles from "./insights.module.css";
 import type { Insight } from "../../schemas/insight.ts";
 
@@ -33,11 +34,18 @@ export const Insights = ({ insights, className, onDelete }: InsightsProps) => {
                     <time dateTime={createdAt.toISOString()}>
                       {DATE_FORMAT.format(createdAt)}
                     </time>
-                    <Trash2Icon
-                      className={styles["insight-delete"]}
-                      onClick={() =>
+                    <InlineConfirm
+                      label="Delete insight"
+                      prompt="Delete this insight?"
+                      confirmLabel="Delete"
+                      onConfirm={() =>
                         onDelete(id)}
-                    />
+                    >
+                      <Trash2Icon
+                        className={styles["insight-delete"]}
+                        aria-hidden
+                      />
+                    </InlineConfirm>
                   </div>
                 </div>
                 <p className={styles["insight-content"]}>{text}</p>
