@@ -1,7 +1,7 @@
 import { Database } from "@db/sqlite";
 import * as oak from "@oak/oak";
 import * as path from "@std/path";
-import { Port } from "../lib/utils/index.ts";
+import { Port } from "@suittracker/lib";
 import { InsightId, NewInsight } from "./models/insight.ts";
 import createInsight from "./operations/create-insight.ts";
 import deleteInsight from "./operations/delete-insight.ts";

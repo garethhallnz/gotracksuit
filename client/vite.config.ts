@@ -1,5 +1,5 @@
 import deno from "@deno/vite-plugin";
-import { Port } from "../lib/utils/index.ts";
+import { Port } from "@suittracker/lib";
 import react from "@vitejs/plugin-react";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
 import process from "node:process";
