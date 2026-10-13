@@ -6,10 +6,14 @@ import { useInsights } from "../hooks/use-insights.ts";
 import styles from "./app.module.css";
 
 export const App = () => {
-  const { insights, status, retryLoad, addInsight, deleteInsight } =
-    useInsights();
-
-  const isListVisible = status === "ready" || status === "delete-failed";
+  const {
+    insights,
+    status,
+    hasDeleteFailed,
+    retryLoad,
+    addInsight,
+    deleteInsight,
+  } = useInsights();
 
   return (
     <main className={styles.main}>
@@ -23,11 +27,11 @@ export const App = () => {
           <Button label="Try again" theme="secondary" onClick={retryLoad} />
         </div>
       )}
-      {isListVisible && (
+      {status === "ready" && (
         <Insights
           className={styles.insights}
           insights={insights}
-          error={status === "delete-failed"
+          error={hasDeleteFailed
             ? "Couldn't delete the insight. Please try again."
             : undefined}
           onDelete={deleteInsight}
