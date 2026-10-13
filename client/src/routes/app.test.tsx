@@ -31,6 +31,20 @@ describe("App", () => {
     vi.unstubAllGlobals();
   });
 
+  it("shows a loading message until insights arrive", async () => {
+    const { promise, resolve } = Promise.withResolvers<Response>();
+    vi.stubGlobal("fetch", vi.fn(() => promise));
+    render(<App />);
+
+    expect(screen.getByRole("status").textContent).toBe("Loading insights…");
+    expect(screen.queryByText("We have no insight!")).toBeNull();
+
+    resolve(json([]));
+
+    expect(await screen.findByText("We have no insight!")).toBeTruthy();
+    expect(screen.queryByRole("status")).toBeNull();
+  });
+
   it("shows an error instead of the empty state when loading fails, and can retry", async () => {
     const fetch = stubFetch(status(500), json([]));
     render(<App />);

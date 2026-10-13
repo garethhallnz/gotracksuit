@@ -10,6 +10,10 @@
   margin-top: var(--size-10);
 }
 
+.loading {
+  margin-top: var(--size-10);
+}
+
 .load-failed {
   display: flex;
   flex-direction: column;
