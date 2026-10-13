@@ -6,7 +6,7 @@ import { Button } from "../button/button.tsx";
 import { Modal, type ModalProps } from "../modal/modal.tsx";
 import styles from "./add-insight.module.css";
 
-type AddInsightProps = ModalProps & {
+type AddInsightProps = Pick<ModalProps, "open" | "onClose"> & {
   onAdd(insight: NewInsight): Promise<void>;
 };
 
@@ -42,8 +42,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
   };
 
   return (
-    <Modal {...props} onClose={close}>
-      <h1 className={styles.heading}>Add a new insight</h1>
+    <Modal {...props} title="Add a new insight" onClose={close}>
       <form className={styles.form} onSubmit={addInsight}>
         <label className={styles.field}>
           <select

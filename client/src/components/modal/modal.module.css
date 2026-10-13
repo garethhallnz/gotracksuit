@@ -26,6 +26,15 @@
   border-radius: var(--radius-xl);
 }
 
+.modal:focus-visible {
+  outline: none;
+}
+
+.title {
+  font: var(--text-xl);
+  font-weight: var(--weight-medium);
+}
+
 .close {
   position: absolute;
   top: var(--size-6);

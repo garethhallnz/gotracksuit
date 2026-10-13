@@ -1,7 +1,7 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { XIcon } from "lucide-react";
-import type { ReactNode } from "react";
-import { useEffect } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
+import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cx } from "../../lib/cx.ts";
 import styles from "./modal.module.css";
@@ -11,6 +11,7 @@ export type ModalProps = {
   open: boolean;
   /** Callback when modal closes */
   onClose(): void;
+  title: string;
   /** Content of the modal */
   children?: ReactNode;
 };
@@ -35,10 +36,32 @@ const ANIMATIONS = {
  * @component
  * Modal that opens in a portal
  */
-export const Modal = ({ open, onClose, children }: ModalProps) => {
+export const Modal = ({ open, onClose, title, children }: ModalProps) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
   }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const opener = document.activeElement;
+    const page = document.getElementById("root");
+    page?.setAttribute("inert", "");
+    dialogRef.current?.focus();
+
+    return () => {
+      page?.removeAttribute("inert");
+      if (opener instanceof HTMLElement) opener.focus();
+    };
+  }, [open]);
+
+  const closeOnEscape = (event: KeyboardEvent) => {
+    if (event.key !== "Escape") return;
+    onClose();
+  };
 
   return createPortal(
     <AnimatePresence>
@@ -54,11 +77,17 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
             data-testid="overlay"
           >
             <motion.div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+              tabIndex={-1}
               className={cx(styles.modal)}
               variants={ANIMATIONS.modal}
               onClick={(e) => {
                 e.stopPropagation();
               }}
+              onKeyDown={closeOnEscape}
             >
               <button
                 type="button"
@@ -69,7 +98,10 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
                 <XIcon aria-hidden />
               </button>
 
-              <div className={cx(styles.content)}>{children}</div>
+              <div className={cx(styles.content)}>
+                <h1 id={titleId} className={styles.title}>{title}</h1>
+                {children}
+              </div>
             </motion.div>
           </motion.div>
         </LayoutGroup>
