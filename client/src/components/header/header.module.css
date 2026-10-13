@@ -5,6 +5,7 @@
   background: var(--color-purple-700);
   color: var(--color-off-white);
   padding: var(--size-3) 0;
+  --color-focus: var(--color-off-white);
 }
 
 .inner {

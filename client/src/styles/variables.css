@@ -97,6 +97,7 @@
   --color-bg: var(--color-off-white);
   --color-text: var(--color-black);
   --color-text-light: var(--color-grey-700);
+  --color-focus: var(--color-purple-700);
 
   /* Palette */
   --color-off-white: #faf7f0;
