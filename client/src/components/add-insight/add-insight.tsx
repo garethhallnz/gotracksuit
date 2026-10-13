@@ -42,6 +42,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
             className={styles["field-input"]}
             rows={5}
             placeholder="Something insightful..."
+            required
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
