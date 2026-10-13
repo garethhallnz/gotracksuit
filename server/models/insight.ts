@@ -15,3 +15,5 @@ export const NewInsight = z.object({
 });
 
 export type NewInsight = z.infer<typeof NewInsight>;
+
+export const InsightId = z.string().regex(/^\d+$/).transform(Number);

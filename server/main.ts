@@ -1,9 +1,8 @@
-// deno-lint-ignore-file no-explicit-any
 import { Database } from "@db/sqlite";
 import * as oak from "@oak/oak";
 import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
-import { NewInsight } from "./models/insight.ts";
+import { InsightId, NewInsight } from "./models/insight.ts";
 import createInsight from "./operations/create-insight.ts";
 import deleteInsight from "./operations/delete-insight.ts";
 import listInsights from "./operations/list-insights.ts";
@@ -40,8 +39,13 @@ router.get("/insights", (ctx) => {
 });
 
 router.get("/insights/:id", (ctx) => {
-  const params = ctx.params as Record<string, any>;
-  const result = lookupInsight({ db, id: params.id });
+  const id = InsightId.safeParse(ctx.params.id);
+  if (!id.success) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const result = lookupInsight({ db, id: id.data });
   if (!result) {
     ctx.response.status = 404;
     return;
@@ -65,7 +69,13 @@ router.post("/insights", async (ctx) => {
 });
 
 router.delete("/insights/:id", (ctx) => {
-  const isDeleted = deleteInsight({ db, id: Number(ctx.params.id) });
+  const id = InsightId.safeParse(ctx.params.id);
+  if (!id.success) {
+    ctx.response.status = 400;
+    return;
+  }
+
+  const isDeleted = deleteInsight({ db, id: id.data });
   ctx.response.status = isDeleted ? 204 : 404;
 });
 
