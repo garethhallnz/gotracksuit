@@ -1,6 +1,6 @@
 import type { Insight, NewInsight } from "@suittracker/lib/schemas/insight";
 import type { HasDBClient } from "../shared.ts";
-import type * as insightsTable from "$tables/insights.ts";
+import * as insightsTable from "$tables/insights.ts";
 
 type Input = HasDBClient & NewInsight;
 
@@ -15,7 +15,7 @@ export default (input: Input): Insight => {
     RETURNING *
   `;
 
-  const result = { ...row, createdAt: new Date(row.createdAt) };
+  const result = insightsTable.toInsight(row);
   console.log("Insight created:", result);
   return result;
 };
