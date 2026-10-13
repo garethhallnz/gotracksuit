@@ -6,7 +6,7 @@ type ButtonProps = {
   /** Label for the button */
   label: string;
   /** Theme of the button */
-  theme?: "primary" | "secondary";
+  theme?: "primary" | "secondary" | "danger";
 } & ComponentProps<"button">;
 
 export const Button = ({

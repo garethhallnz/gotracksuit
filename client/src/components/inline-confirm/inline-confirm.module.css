@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.clip {
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 3px;
+  margin: -3px;
+}
+
+.trigger {
+  display: inline-flex;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  &:focus-visible {
+    outline: 2px solid var(--color-purple-500);
+    outline-offset: 2px;
+  }
+}
+
+.confirm {
+  align-items: center;
+  gap: var(--size-2);
+
+  & .action {
+    padding: var(--size-1) var(--size-3);
+    &:focus-visible {
+      outline: 2px solid var(--color-purple-500);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.prompt {
+  color: var(--color-text);
+}

@@ -21,6 +21,13 @@
       color: var(--color-purple-700);
     }
   }
+  &.danger {
+    background: var(--color-red-700);
+    color: var(--color-bg);
+    &:hover {
+      background: color-mix(in srgb, var(--color-red-700), black 20%);
+    }
+  }
   &.secondary {
     color: currentColor;
     border: 1px solid;
