@@ -1,4 +1,5 @@
 import { Trash2Icon } from "lucide-react";
+import { BRANDS } from "../../lib/consts.ts";
 import { cx } from "../../lib/cx.ts";
 import styles from "./insights.module.css";
 import type { Insight } from "../../schemas/insight.ts";
@@ -8,6 +9,9 @@ type InsightsProps = {
   className?: string;
   onDelete(id: number): void;
 };
+
+const lookupBrandName = (brand: number) =>
+  BRANDS.find(({ id }) => id === brand)?.name ?? `Unknown brand (${brand})`;
 
 export const Insights = ({ insights, className, onDelete }: InsightsProps) => {
   return (
@@ -19,7 +23,7 @@ export const Insights = ({ insights, className, onDelete }: InsightsProps) => {
             insights.map(({ id, text, createdAt, brand }) => (
               <div className={styles.insight} key={id}>
                 <div className={styles["insight-meta"]}>
-                  <span>{brand}</span>
+                  <span>{lookupBrandName(brand)}</span>
                   <div className={styles["insight-meta-details"]}>
                     <span>{createdAt.toString()}</span>
                     <Trash2Icon
