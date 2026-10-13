@@ -22,6 +22,17 @@ describe("AddInsight", () => {
     await waitFor(() => expect(onClose).toHaveBeenCalledOnce());
   });
 
+  it("ignores further submits while the insight is being added", () => {
+    const onAdd = vi.fn(() => new Promise<void>(() => {}));
+    submitInsight(onAdd);
+
+    const button = screen.getByRole("button", { name: "Adding…" });
+    expect(button).toHaveProperty("disabled", true);
+
+    fireEvent.click(button);
+    expect(onAdd).toHaveBeenCalledOnce();
+  });
+
   it("stays open with the text kept when saving fails", async () => {
     const { onClose } = submitInsight(() => Promise.reject(new HttpError(500)));
 

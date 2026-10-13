@@ -19,6 +19,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
   const [brand, setBrand] = useState(BRANDS[0].id);
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const close = () => {
     setError(null);
@@ -27,13 +28,17 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
 
   const addInsight = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSubmitting) return;
+
     setError(null);
+    setIsSubmitting(true);
     onAdd({ brand, text })
       .then(() => {
         setText("");
         close();
       })
-      .catch((error) => setError(describeAddFailure(error)));
+      .catch((error) => setError(describeAddFailure(error)))
+      .finally(() => setIsSubmitting(false));
   };
 
   return (
@@ -63,7 +68,12 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
           />
         </label>
         {error && <p role="alert" className={styles.error}>{error}</p>}
-        <Button className={styles.submit} type="submit" label="Add insight" />
+        <Button
+          className={styles.submit}
+          type="submit"
+          label={isSubmitting ? "Adding…" : "Add insight"}
+          disabled={isSubmitting}
+        />
       </form>
     </Modal>
   );
