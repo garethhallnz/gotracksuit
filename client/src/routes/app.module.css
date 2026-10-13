@@ -9,3 +9,11 @@
 .insights {
   margin-top: var(--size-10);
 }
+
+.load-failed {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--size-4);
+  margin-top: var(--size-10);
+}
