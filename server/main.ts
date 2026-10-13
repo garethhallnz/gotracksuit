@@ -42,6 +42,11 @@ router.get("/insights", (ctx) => {
 router.get("/insights/:id", (ctx) => {
   const params = ctx.params as Record<string, any>;
   const result = lookupInsight({ db, id: params.id });
+  if (!result) {
+    ctx.response.status = 404;
+    return;
+  }
+
   ctx.response.body = result;
   ctx.response.status = 200;
 });
