@@ -9,3 +9,5 @@ const UInt16: z.ZodNumber = z
 export const Port: z.ZodPipeline<z.ZodNumber, z.ZodNumber> = z.coerce
   .number()
   .pipe(UInt16);
+
+export const BaseUrl: z.ZodString = z.string().url();
