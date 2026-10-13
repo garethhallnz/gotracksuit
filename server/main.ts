@@ -5,6 +5,7 @@ import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
+import * as insightsTable from "./tables/insights.ts";
 
 console.log("Loading configuration");
 
@@ -18,6 +19,7 @@ console.log(`Opening SQLite database at ${dbFilePath}`);
 
 await Deno.mkdir(path.dirname(dbFilePath), { recursive: true });
 const db = new Database(dbFilePath);
+db.exec(insightsTable.createTable);
 
 console.log("Initialising server");
 
