@@ -10,6 +10,11 @@ type InsightsProps = {
   onDelete(id: number): void;
 };
 
+const DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
 const lookupBrandName = (brand: number) =>
   BRANDS.find(({ id }) => id === brand)?.name ?? `Unknown brand (${brand})`;
 
@@ -25,7 +30,9 @@ export const Insights = ({ insights, className, onDelete }: InsightsProps) => {
                 <div className={styles["insight-meta"]}>
                   <span>{lookupBrandName(brand)}</span>
                   <div className={styles["insight-meta-details"]}>
-                    <span>{createdAt.toString()}</span>
+                    <time dateTime={createdAt.toISOString()}>
+                      {DATE_FORMAT.format(createdAt)}
+                    </time>
                     <Trash2Icon
                       className={styles["insight-delete"]}
                       onClick={() =>
