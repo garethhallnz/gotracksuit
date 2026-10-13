@@ -8,6 +8,7 @@ import type { Insight } from "../../schemas/insight.ts";
 type InsightsProps = {
   insights: Insight[];
   className?: string;
+  error?: string;
   onDelete(id: number): void;
 };
 
@@ -19,10 +20,13 @@ const DATE_FORMAT = new Intl.DateTimeFormat(undefined, {
 const lookupBrandName = (brand: number) =>
   BRANDS.find(({ id }) => id === brand)?.name ?? `Unknown brand (${brand})`;
 
-export const Insights = ({ insights, className, onDelete }: InsightsProps) => {
+export const Insights = (
+  { insights, className, error, onDelete }: InsightsProps,
+) => {
   return (
     <div className={cx(className)}>
       <h1 className={styles.heading}>Insights</h1>
+      {error && <p role="alert" className={styles.error}>{error}</p>}
       <div className={styles.list}>
         {insights?.length
           ? (

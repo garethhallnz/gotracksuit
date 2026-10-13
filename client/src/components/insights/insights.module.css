@@ -2,6 +2,11 @@
   font: var(--text-2xl);
 }
 
+.error {
+  margin: var(--size-4) 0 0;
+  color: var(--color-red-700);
+}
+
 .list {
   display: flex;
   flex-direction: column;

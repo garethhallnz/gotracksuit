@@ -2,22 +2,29 @@ import { useEffect, useState } from "react";
 import { Button } from "../components/button/button.tsx";
 import { Header } from "../components/header/header.tsx";
 import { Insights } from "../components/insights/insights.tsx";
-import { request } from "../lib/request.ts";
+import { HttpError, request } from "../lib/request.ts";
 import styles from "./app.module.css";
 import { Insight, type NewInsight } from "../schemas/insight.ts";
 
+type Failure = "load" | "delete";
+
+const ignoreNotFound = (error: unknown) => {
+  if (error instanceof HttpError && error.status === 404) return;
+  throw error;
+};
+
 export const App = () => {
   const [insights, setInsights] = useState<Insight[]>([]);
-  const [hasLoadFailed, setHasLoadFailed] = useState(false);
+  const [failure, setFailure] = useState<Failure | null>(null);
 
   const loadInsights = () =>
     request(`/api/insights`)
       .then((res) => res.json())
       .then((data) => {
         setInsights(Insight.array().parse(data));
-        setHasLoadFailed(false);
+        setFailure(null);
       })
-      .catch(() => setHasLoadFailed(true));
+      .catch(() => setFailure("load"));
 
   const addInsight = (insight: NewInsight) =>
     request(`/api/insights`, {
@@ -27,8 +34,10 @@ export const App = () => {
     }).then(() => loadInsights());
 
   const deleteInsight = (id: number) =>
-    fetch(`/api/insights/${id}`, { method: "DELETE" })
-      .then(() => loadInsights());
+    request(`/api/insights/${id}`, { method: "DELETE" })
+      .catch(ignoreNotFound)
+      .then(() => loadInsights())
+      .catch(() => setFailure("delete"));
 
   useEffect(() => {
     loadInsights();
@@ -37,7 +46,7 @@ export const App = () => {
   return (
     <main className={styles.main}>
       <Header onAddInsight={addInsight} />
-      {hasLoadFailed
+      {failure === "load"
         ? (
           <div className={styles["load-failed"]}>
             <p role="alert">Couldn't load insights.</p>
@@ -52,6 +61,9 @@ export const App = () => {
           <Insights
             className={styles.insights}
             insights={insights}
+            error={failure === "delete"
+              ? "Couldn't delete the insight. Please try again."
+              : undefined}
             onDelete={deleteInsight}
           />
         )}

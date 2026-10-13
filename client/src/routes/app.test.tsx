@@ -2,6 +2,13 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "./app.tsx";
 
+const INSIGHT = {
+  id: 1,
+  brand: 1,
+  createdAt: "2026-10-13T05:30:00.000Z",
+  text: "Socks with sandals",
+};
+
 const json = (body: unknown) => new Response(JSON.stringify(body));
 const status = (code: number) => new Response(null, { status: code });
 
@@ -10,6 +17,13 @@ const stubFetch = (...responses: Response[]) => {
   responses.forEach((response) => fetch.mockResolvedValueOnce(response));
   vi.stubGlobal("fetch", fetch);
   return fetch;
+};
+
+const confirmDelete = async () => {
+  fireEvent.click(
+    await screen.findByRole("button", { name: "Delete insight" }),
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Delete" }));
 };
 
 describe("App", () => {
@@ -30,5 +44,27 @@ describe("App", () => {
 
     expect(await screen.findByText("We have no insight!")).toBeTruthy();
     expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("treats deleting an insight that's already gone as done", async () => {
+    stubFetch(json([INSIGHT]), status(404), json([]));
+    render(<App />);
+
+    await confirmDelete();
+
+    expect(await screen.findByText("We have no insight!")).toBeTruthy();
+    expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("keeps the insight and shows an error when deleting fails", async () => {
+    stubFetch(json([INSIGHT]), status(500));
+    render(<App />);
+
+    await confirmDelete();
+
+    expect((await screen.findByRole("alert")).textContent).toBe(
+      "Couldn't delete the insight. Please try again.",
+    );
+    expect(screen.getByText(INSIGHT.text)).toBeTruthy();
   });
 });
