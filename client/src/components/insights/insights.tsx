@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { cx } from "../../lib/cx.ts";
 import { InlineConfirm } from "../inline-confirm/inline-confirm.tsx";
+// @ts-types="../../types/css-module.d.ts"
 import styles from "./insights.module.css";
 import type { Insight } from "../../schemas/insight.ts";
 

@@ -4,6 +4,7 @@ import { HttpError } from "../../lib/request.ts";
 import type { NewInsight } from "../../schemas/insight.ts";
 import { Button } from "../button/button.tsx";
 import { Modal, type ModalProps } from "../modal/modal.tsx";
+// @ts-types="../../types/css-module.d.ts"
 import styles from "./add-insight.module.css";
 
 type AddInsightProps = Pick<ModalProps, "open" | "onClose"> & {

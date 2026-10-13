@@ -4,6 +4,7 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { cx } from "../../lib/cx.ts";
+// @ts-types="../../types/css-module.d.ts"
 import styles from "./modal.module.css";
 
 export type ModalProps = {
