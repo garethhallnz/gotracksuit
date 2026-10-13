@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { Modal } from "./modal.tsx";
 
 describe("Modal", () => {
@@ -17,5 +17,13 @@ describe("Modal", () => {
       </Modal>,
     );
     expect(screen.getByText("Open modal")).toBeTruthy();
+  });
+
+  it("closes from the close button", () => {
+    const onClose = vi.fn();
+    render(<Modal open onClose={onClose}>Content</Modal>);
+
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(onClose).toHaveBeenCalledOnce();
   });
 });
