@@ -26,7 +26,8 @@
     color: currentColor;
     border: 1px solid;
   }
-  &:disabled {
+  &:disabled,
+  &[aria-disabled="true"] {
     pointer-events: none;
     cursor: not-allowed;
     background: var(--color-grey-300);

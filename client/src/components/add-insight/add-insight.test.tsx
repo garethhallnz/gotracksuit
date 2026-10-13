@@ -30,7 +30,7 @@ describe("AddInsight", () => {
     submitInsight(onAdd);
 
     const button = screen.getByRole("button", { name: "Adding…" });
-    expect(button).toHaveProperty("disabled", true);
+    expect(button.getAttribute("aria-disabled")).toBe("true");
 
     fireEvent.click(button);
     expect(onAdd).toHaveBeenCalledOnce();

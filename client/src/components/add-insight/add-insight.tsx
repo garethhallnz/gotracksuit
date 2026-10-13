@@ -72,7 +72,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
           className={styles.submit}
           type="submit"
           label={isSubmitting ? "Adding…" : "Add insight"}
-          disabled={isSubmitting}
+          aria-disabled={isSubmitting}
         />
       </form>
     </Modal>
