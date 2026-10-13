@@ -1,5 +1,8 @@
 .heading {
   font: var(--text-2xl);
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .error {

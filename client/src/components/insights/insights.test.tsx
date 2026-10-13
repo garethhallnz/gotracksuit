@@ -31,5 +31,8 @@ describe("insights", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Delete" }));
     expect(onDelete).toHaveBeenCalledWith(TEST_INSIGHTS[0].id);
+    expect(document.activeElement).toBe(
+      screen.getByRole("heading", { name: "Insights" }),
+    );
   });
 });

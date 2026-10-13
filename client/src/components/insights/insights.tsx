@@ -1,4 +1,5 @@
 import { Trash2Icon } from "lucide-react";
+import { useRef } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { cx } from "../../lib/cx.ts";
 import { InlineConfirm } from "../inline-confirm/inline-confirm.tsx";
@@ -23,9 +24,18 @@ const lookupBrandName = (brand: number) =>
 export const Insights = (
   { insights, className, error, onDelete }: InsightsProps,
 ) => {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  const deleteInsight = (id: number) => {
+    onDelete(id);
+    headingRef.current?.focus();
+  };
+
   return (
     <div className={cx(className)}>
-      <h1 className={styles.heading}>Insights</h1>
+      <h1 ref={headingRef} tabIndex={-1} className={styles.heading}>
+        Insights
+      </h1>
       {error && <p role="alert" className={styles.error}>{error}</p>}
       <div className={styles.list}>
         {insights?.length
@@ -43,7 +53,7 @@ export const Insights = (
                       prompt="Delete this insight?"
                       confirmLabel="Delete"
                       onConfirm={() =>
-                        onDelete(id)}
+                        deleteInsight(id)}
                     >
                       <Trash2Icon
                         className={styles["insight-delete"]}
