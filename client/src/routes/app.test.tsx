@@ -60,6 +60,29 @@ describe("App", () => {
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
+  it("adds an insight and shows it in the list", async () => {
+    const fetch = stubFetch(json([]), status(201), json([INSIGHT]));
+    render(<App />);
+
+    fireEvent.click(await screen.findByRole("button", { name: "Add insight" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Insight" }), {
+      target: { value: INSIGHT.text },
+    });
+    const [, submit] = screen.getAllByRole("button", { name: "Add insight" });
+    fireEvent.click(submit);
+
+    expect(await screen.findByText(INSIGHT.text, { selector: "p" }))
+      .toBeTruthy();
+    expect(fetch).toHaveBeenNthCalledWith(
+      2,
+      "/api/insights",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ brand: INSIGHT.brand, text: INSIGHT.text }),
+      }),
+    );
+  });
+
   it("treats deleting an insight that's already gone as done", async () => {
     stubFetch(json([INSIGHT]), status(404), json([]));
     render(<App />);
