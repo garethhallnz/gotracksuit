@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from "react";
 import { BRANDS } from "../../lib/consts.ts";
+import { HttpError } from "../../lib/request.ts";
 import type { NewInsight } from "../../schemas/insight.ts";
 import { Button } from "../button/button.tsx";
 import { Modal, type ModalProps } from "../modal/modal.tsx";
@@ -9,20 +10,34 @@ type AddInsightProps = ModalProps & {
   onAdd(insight: NewInsight): Promise<void>;
 };
 
+const describeAddFailure = (error: unknown) =>
+  error instanceof HttpError && error.isClientError
+    ? "Check the insight and try again."
+    : "Couldn't save the insight. Please try again.";
+
 export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
   const [brand, setBrand] = useState(BRANDS[0].id);
   const [text, setText] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const close = () => {
+    setError(null);
+    props.onClose();
+  };
 
   const addInsight = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onAdd({ brand, text }).then(() => {
-      setText("");
-      props.onClose();
-    });
+    setError(null);
+    onAdd({ brand, text })
+      .then(() => {
+        setText("");
+        close();
+      })
+      .catch((error) => setError(describeAddFailure(error)));
   };
 
   return (
-    <Modal {...props}>
+    <Modal {...props} onClose={close}>
       <h1 className={styles.heading}>Add a new insight</h1>
       <form className={styles.form} onSubmit={addInsight}>
         <label className={styles.field}>
@@ -47,6 +62,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
             onChange={(e) => setText(e.target.value)}
           />
         </label>
+        {error && <p role="alert" className={styles.error}>{error}</p>}
         <Button className={styles.submit} type="submit" label="Add insight" />
       </form>
     </Modal>

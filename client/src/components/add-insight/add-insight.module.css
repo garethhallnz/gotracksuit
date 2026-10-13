@@ -26,6 +26,12 @@
   padding: var(--size-4);
 }
 
+.error {
+  margin: 0;
+  font: var(--text-sm);
+  color: var(--color-red-700);
+}
+
 .submit {
   align-self: flex-end;
 }

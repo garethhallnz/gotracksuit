@@ -20,7 +20,7 @@ export const App = () => {
       .catch(() => setHasLoadFailed(true));
 
   const addInsight = (insight: NewInsight) =>
-    fetch(`/api/insights`, {
+    request(`/api/insights`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(insight),
