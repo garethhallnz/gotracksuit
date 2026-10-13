@@ -19,6 +19,10 @@ export const App = () => {
       body: JSON.stringify(insight),
     }).then(() => loadInsights());
 
+  const deleteInsight = (id: number) =>
+    fetch(`/api/insights/${id}`, { method: "DELETE" })
+      .then(() => loadInsights());
+
   useEffect(() => {
     loadInsights();
   }, []);
@@ -26,7 +30,11 @@ export const App = () => {
   return (
     <main className={styles.main}>
       <Header onAddInsight={addInsight} />
-      <Insights className={styles.insights} insights={insights} />
+      <Insights
+        className={styles.insights}
+        insights={insights}
+        onDelete={deleteInsight}
+      />
     </main>
   );
 };
