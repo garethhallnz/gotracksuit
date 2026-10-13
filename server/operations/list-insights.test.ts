@@ -22,10 +22,10 @@ describe("listing insights in the database", () => {
   describe("populated DB", () => {
     withDB((fixture) => {
       const insights: Insight[] = [
-        { id: 1, brand: 0, createdAt: new Date(), text: "1" },
-        { id: 2, brand: 0, createdAt: new Date(), text: "Don't" },
-        { id: 3, brand: 1, createdAt: new Date(), text: "3" },
-        { id: 4, brand: 4, createdAt: new Date(), text: "4" },
+        { id: 1, brand: 0, createdAt: new Date("2026-01-02"), text: "1" },
+        { id: 2, brand: 0, createdAt: new Date("2026-01-04"), text: "Don't" },
+        { id: 3, brand: 1, createdAt: new Date("2026-01-01"), text: "3" },
+        { id: 4, brand: 4, createdAt: new Date("2026-01-03"), text: "4" },
       ];
 
       let result: Insight[];
@@ -44,8 +44,13 @@ describe("listing insights in the database", () => {
         expect(result.length).toBeGreaterThan(0);
       });
 
-      it("returns all insights in the DB", () => {
-        expect(result).toEqual(insights);
+      it("returns all insights in the DB, newest first", () => {
+        expect(result).toEqual([
+          insights[1],
+          insights[3],
+          insights[0],
+          insights[2],
+        ]);
       });
     });
   });
