@@ -43,7 +43,19 @@ export const createApp = (db: Database) => {
       return;
     }
 
-    const input = NewInsight.safeParse(await ctx.request.body.json());
+    let body: unknown;
+    try {
+      body = await ctx.request.body.json();
+    } catch {
+      ctx.response.body = {
+        formErrors: ["Body must be valid JSON"],
+        fieldErrors: {},
+      };
+      ctx.response.status = 400;
+      return;
+    }
+
+    const input = NewInsight.safeParse(body);
     if (!input.success) {
       ctx.response.body = input.error.flatten();
       ctx.response.status = 400;

@@ -45,7 +45,7 @@ describe("GET /insights/:id", () => {
 
 describe("POST /insights", () => {
   withDB((fixture) => {
-    it("creates an insight with trimmed text, and rejects blank text and non-JSON bodies", async () => {
+    it("creates an insight with trimmed text, and rejects blank text, non-JSON and malformed JSON bodies", async () => {
       const app = createApp(fixture.db);
       const post = (body: unknown) =>
         app.handle(request("/insights", {
@@ -70,6 +70,18 @@ describe("POST /insights", () => {
         body: JSON.stringify({ brand: 2, text: "From another site" }),
       }));
       expect(formPost?.status).toBe(415);
+
+      const malformed = await app.handle(request("/insights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: '{"brand": 2,',
+      }));
+      expect(malformed?.status).toBe(400);
+      expect(malformed?.headers.get("X-Content-Type-Options")).toBe("nosniff");
+      expect(await malformed?.json()).toEqual({
+        formErrors: ["Body must be valid JSON"],
+        fieldErrors: {},
+      });
       expect(fixture.insights.selectAll()).toHaveLength(1);
     });
   });
