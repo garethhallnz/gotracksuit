@@ -17,7 +17,7 @@ describe("insights", () => {
     const { getByText } = render(
       <Insights insights={TEST_INSIGHTS} onDelete={() => undefined} />,
     );
-    expect(getByText(TEST_INSIGHTS[0].text)).toBeTruthy();
+    expect(getByText(TEST_INSIGHTS[0].text)).toBeInTheDocument();
   });
 
   it("deletes an insight only once the delete is confirmed", () => {
@@ -31,9 +31,7 @@ describe("insights", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Delete" }));
     expect(onDelete).toHaveBeenCalledWith(TEST_INSIGHTS[0].id);
-    expect(document.activeElement).toBe(
-      screen.getByRole("heading", { name: "Insights" }),
-    );
+    expect(screen.getByRole("heading", { name: "Insights" })).toHaveFocus();
   });
 
   it("shows markup in an insight as text instead of rendering it", () => {
@@ -46,6 +44,6 @@ describe("insights", () => {
     );
 
     expect(screen.getByText(text)).toBeInTheDocument();
-    expect(container.querySelector("img")).toBeNull();
+    expect(container.querySelector("img")).not.toBeInTheDocument();
   });
 });

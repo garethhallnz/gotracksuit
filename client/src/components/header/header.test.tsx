@@ -7,6 +7,6 @@ describe("header", () => {
     const { getByText } = render(
       <Header onAddInsight={() => Promise.resolve()} />,
     );
-    expect(getByText(HEADER_TEXT)).toBeTruthy();
+    expect(getByText(HEADER_TEXT)).toBeInTheDocument();
   });
 });

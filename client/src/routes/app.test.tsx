@@ -36,27 +36,27 @@ describe("App", () => {
     vi.stubGlobal("fetch", vi.fn(() => promise));
     render(<App />);
 
-    expect(screen.getByRole("status").textContent).toBe("Loading insights…");
-    expect(screen.queryByText("We have no insight!")).toBeNull();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading insights…");
+    expect(screen.queryByText("We have no insight!")).not.toBeInTheDocument();
 
     resolve(json([]));
 
-    expect(await screen.findByText("We have no insight!")).toBeTruthy();
-    expect(screen.queryByRole("status")).toBeNull();
+    expect(await screen.findByText("We have no insight!")).toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
   it("shows an error instead of the empty state when loading fails, and can retry", async () => {
     const fetch = stubFetch(status(500), json([]));
     render(<App />);
 
-    expect((await screen.findByRole("alert")).textContent).toBe(
+    expect(await screen.findByRole("alert")).toHaveTextContent(
       "Couldn't load insights.",
     );
-    expect(screen.queryByText("We have no insight!")).toBeNull();
+    expect(screen.queryByText("We have no insight!")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Try again" }));
 
-    expect(await screen.findByText("We have no insight!")).toBeTruthy();
+    expect(await screen.findByText("We have no insight!")).toBeInTheDocument();
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
@@ -72,7 +72,7 @@ describe("App", () => {
     fireEvent.click(submit);
 
     expect(await screen.findByText(INSIGHT.text, { selector: "p" }))
-      .toBeTruthy();
+      .toBeInTheDocument();
     expect(fetch).toHaveBeenNthCalledWith(
       2,
       "/api/insights",
@@ -89,8 +89,8 @@ describe("App", () => {
 
     await confirmDelete();
 
-    expect(await screen.findByText("We have no insight!")).toBeTruthy();
-    expect(screen.queryByRole("alert")).toBeNull();
+    expect(await screen.findByText("We have no insight!")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("keeps the insight and shows an error when deleting fails", async () => {
@@ -99,9 +99,9 @@ describe("App", () => {
 
     await confirmDelete();
 
-    expect((await screen.findByRole("alert")).textContent).toBe(
+    expect(await screen.findByRole("alert")).toHaveTextContent(
       "Couldn't delete the insight. Please try again.",
     );
-    expect(screen.getByText(INSIGHT.text)).toBeTruthy();
+    expect(screen.getByText(INSIGHT.text)).toBeInTheDocument();
   });
 });

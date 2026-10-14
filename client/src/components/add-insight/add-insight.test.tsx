@@ -41,7 +41,7 @@ describe("AddInsight", () => {
     submitInsight(onAdd);
 
     const button = screen.getByRole("button", { name: "Adding…" });
-    expect(button.getAttribute("aria-disabled")).toBe("true");
+    expect(button).toHaveAttribute("aria-disabled", "true");
 
     fireEvent.click(button);
     expect(onAdd).toHaveBeenCalledOnce();
@@ -50,11 +50,10 @@ describe("AddInsight", () => {
   it("stays open with the text kept when saving fails", async () => {
     const { onClose } = submitInsight(() => Promise.reject(new HttpError(500)));
 
-    expect((await screen.findByRole("alert")).textContent).toBe(
+    expect(await screen.findByRole("alert")).toHaveTextContent(
       "Couldn't save the insight. Please try again.",
     );
-    expect(screen.getByRole("textbox", { name: "Insight" })).toHaveProperty(
-      "value",
+    expect(screen.getByRole("textbox", { name: "Insight" })).toHaveValue(
       "Socks with sandals",
     );
     expect(onClose).not.toHaveBeenCalled();
@@ -63,7 +62,7 @@ describe("AddInsight", () => {
   it("asks the user to check the insight when the API rejects it", async () => {
     submitInsight(() => Promise.reject(new HttpError(400)));
 
-    expect((await screen.findByRole("alert")).textContent).toBe(
+    expect(await screen.findByRole("alert")).toHaveTextContent(
       "Check the insight and try again.",
     );
   });

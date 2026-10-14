@@ -5,6 +5,6 @@ import { render } from "@testing-library/react";
 describe("button", () => {
   it("renders", () => {
     const { getByText } = render(<Button label="Test" />);
-    expect(getByText("Test")).toBeTruthy();
+    expect(getByText("Test")).toBeInTheDocument();
   });
 });

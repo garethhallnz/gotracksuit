@@ -26,10 +26,8 @@ describe("InlineConfirm", () => {
     startConfirming();
 
     expect(screen.getByRole("group", { name: "Delete this thing?" }))
-      .toBeTruthy();
-    expect(document.activeElement).toBe(
-      screen.getByRole("button", { name: "Cancel" }),
-    );
+      .toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
   });
 
   it("calls onConfirm when confirmed", () => {
@@ -46,9 +44,7 @@ describe("InlineConfirm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
     expect(onConfirm).not.toHaveBeenCalled();
-    expect(document.activeElement).toBe(
-      screen.getByRole("button", { name: "Delete thing" }),
-    );
+    expect(screen.getByRole("button", { name: "Delete thing" })).toHaveFocus();
   });
 
   it("returns focus to the trigger without confirming on Escape", () => {
@@ -57,8 +53,6 @@ describe("InlineConfirm", () => {
     fireEvent.keyDown(screen.getByRole("group"), { key: "Escape" });
 
     expect(onConfirm).not.toHaveBeenCalled();
-    expect(document.activeElement).toBe(
-      screen.getByRole("button", { name: "Delete thing" }),
-    );
+    expect(screen.getByRole("button", { name: "Delete thing" })).toHaveFocus();
   });
 });

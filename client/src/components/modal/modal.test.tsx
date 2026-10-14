@@ -30,14 +30,14 @@ describe("Modal", () => {
         Closed modal
       </Modal>,
     );
-    expect(screen.queryByText("Closed modal")).toBeFalsy();
+    expect(screen.queryByText("Closed modal")).not.toBeInTheDocument();
 
     render(
       <Modal open={true} title="Title" onClose={() => undefined}>
         <div>Open modal</div>
       </Modal>,
     );
-    expect(screen.getByText("Open modal")).toBeTruthy();
+    expect(screen.getByText("Open modal")).toBeInTheDocument();
   });
 
   it("closes from the close button", () => {
@@ -55,13 +55,15 @@ describe("Modal", () => {
     fireEvent.click(opener);
 
     const dialog = screen.getByRole("dialog", { name: "Title" });
-    expect(document.activeElement).toBe(dialog);
+    expect(dialog).toHaveFocus();
     expect(root.hasAttribute("inert")).toBe(true);
 
     fireEvent.keyDown(dialog, { key: "Escape" });
 
-    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-    expect(document.activeElement).toBe(opener);
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    );
+    expect(opener).toHaveFocus();
     expect(root.hasAttribute("inert")).toBe(false);
   });
 });
