@@ -67,6 +67,10 @@ export const createApp = (db: Database) => {
   });
 
   const app = new oak.Application();
+  app.use(async (ctx, next) => {
+    ctx.response.headers.set("X-Content-Type-Options", "nosniff");
+    await next();
+  });
   app.use(router.routes());
   app.use(router.allowedMethods());
   return app;
