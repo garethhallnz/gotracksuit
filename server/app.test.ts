@@ -30,7 +30,7 @@ describe("GET /insights/:id", () => {
 
 describe("POST /insights", () => {
   withDB((fixture) => {
-    it("creates an insight with trimmed text and rejects whitespace-only text", async () => {
+    it("creates an insight with trimmed text, and rejects blank text and non-JSON bodies", async () => {
       const app = createApp(fixture.db);
       const post = (body: unknown) =>
         app.handle(request("/insights", {
@@ -48,6 +48,13 @@ describe("POST /insights", () => {
       });
 
       expect((await post({ brand: 2, text: "   " }))?.status).toBe(400);
+
+      const formPost = await app.handle(request("/insights", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ brand: 2, text: "From another site" }),
+      }));
+      expect(formPost?.status).toBe(415);
       expect(fixture.insights.selectAll()).toHaveLength(1);
     });
   });

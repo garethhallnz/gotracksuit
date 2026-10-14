@@ -38,6 +38,11 @@ export const createApp = (db: Database) => {
   });
 
   router.post("/insights", async (ctx) => {
+    if (ctx.request.body.type() !== "json") {
+      ctx.response.status = 415;
+      return;
+    }
+
     const input = NewInsight.safeParse(await ctx.request.body.json());
     if (!input.success) {
       ctx.response.body = input.error.flatten();
