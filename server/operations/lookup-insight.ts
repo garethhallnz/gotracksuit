@@ -1,13 +1,14 @@
 import type { Insight } from "@suittracker/lib/schemas/insight";
 import type { HasDBClient } from "../shared.ts";
 import * as insightsTable from "$tables/insights.ts";
+import { log } from "../log.ts";
 
 type Input = HasDBClient & {
   id: number;
 };
 
 export default (input: Input): Insight | undefined => {
-  console.log(`Looking up insight for id=${input.id}`);
+  log.debug(`Looking up insight id=${input.id}`);
 
   const [row] = input.db
     .sql<
@@ -16,10 +17,10 @@ export default (input: Input): Insight | undefined => {
 
   if (row) {
     const result = insightsTable.toInsight(row);
-    console.log("Insight retrieved:", result);
+    log.debug(`Found insight id=${input.id}`);
     return result;
   }
 
-  console.log("Insight not found");
+  log.debug(`No insight found for id=${input.id}`);
   return;
 };
