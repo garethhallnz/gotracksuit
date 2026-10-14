@@ -47,6 +47,19 @@ tasks either from the repo root or within each package
 deno task dev
 ```
 
+### Testing
+
+```sh
+deno task test
+```
+
+Runs the server tests, then the client tests. To run one side only:
+
+```sh
+deno task test:server
+deno task test:client
+```
+
 ### Typechecking
 
 ```sh
