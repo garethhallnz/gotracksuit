@@ -1,7 +1,10 @@
 import { type FormEvent, useState } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { HttpError } from "../../lib/request.ts";
-import type { NewInsight } from "@suittracker/lib/schemas/insight";
+import {
+  INSIGHT_TEXT_MAX_LENGTH,
+  type NewInsight,
+} from "@suittracker/lib/schemas/insight";
 import { Button } from "../button/button.tsx";
 import { Modal, type ModalProps } from "../modal/modal.tsx";
 // @ts-types="../../types/css-module.d.ts"
@@ -64,6 +67,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
             rows={5}
             placeholder="Something insightful..."
             required
+            maxLength={INSIGHT_TEXT_MAX_LENGTH}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />

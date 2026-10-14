@@ -60,6 +60,24 @@ describe("POST /insights", () => {
   });
 });
 
+describe("POST /insights text length", () => {
+  withDB((fixture) => {
+    it("accepts text up to 1,000 characters and rejects longer text", async () => {
+      const app = createApp(fixture.db);
+      const post = (text: string) =>
+        app.handle(request("/insights", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ brand: 1, text }),
+        }));
+
+      expect((await post("x".repeat(1000)))?.status).toBe(201);
+      expect((await post("x".repeat(1001)))?.status).toBe(400);
+      expect(fixture.insights.selectAll()).toHaveLength(1);
+    });
+  });
+});
+
 describe("DELETE /insights/:id", () => {
   withDB((fixture) => {
     it("deletes an insight, then returns 404, and rejects an invalid id", async () => {

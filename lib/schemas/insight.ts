@@ -14,12 +14,14 @@ export const Insight: z.ZodObject<{
 
 export type Insight = z.infer<typeof Insight>;
 
+export const INSIGHT_TEXT_MAX_LENGTH = 1000;
+
 export const NewInsight: z.ZodObject<{
   brand: z.ZodNumber;
   text: z.ZodString;
 }> = z.object({
   brand: z.number().int().min(0),
-  text: z.string().trim().min(1),
+  text: z.string().trim().min(1).max(INSIGHT_TEXT_MAX_LENGTH),
 });
 
 export type NewInsight = z.infer<typeof NewInsight>;
