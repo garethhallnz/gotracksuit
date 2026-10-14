@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useId, useState } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { HttpError } from "../../lib/request.ts";
 import {
@@ -24,6 +24,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const counterId = useId();
 
   const close = () => {
     setError(null);
@@ -60,18 +61,24 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
             ))}
           </select>
         </label>
-        <label className={styles.field}>
-          Insight
-          <textarea
-            className={styles["field-input"]}
-            rows={5}
-            placeholder="Something insightful..."
-            required
-            maxLength={INSIGHT_TEXT_MAX_LENGTH}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-        </label>
+        <div className={styles["field-with-counter"]}>
+          <label className={styles.field}>
+            Insight
+            <textarea
+              className={styles["field-input"]}
+              rows={5}
+              placeholder="Something insightful..."
+              required
+              maxLength={INSIGHT_TEXT_MAX_LENGTH}
+              aria-describedby={counterId}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </label>
+          <p id={counterId} className={styles.counter}>
+            {text.length} / {INSIGHT_TEXT_MAX_LENGTH}
+          </p>
+        </div>
         {error && <p role="alert" className={styles.error}>{error}</p>}
         <Button
           className={styles.submit}

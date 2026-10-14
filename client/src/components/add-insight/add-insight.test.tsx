@@ -19,6 +19,17 @@ const submitInsight = (onAdd: () => Promise<void>) => {
 };
 
 describe("AddInsight", () => {
+  it("shows how many characters have been used out of the limit", () => {
+    render(
+      <AddInsight open onClose={() => {}} onAdd={() => Promise.resolve()} />,
+    );
+    const textbox = screen.getByRole("textbox", { name: "Insight" });
+    expect(textbox).toHaveAccessibleDescription("0 / 1000");
+
+    fireEvent.change(textbox, { target: { value: "Socks" } });
+    expect(textbox).toHaveAccessibleDescription("5 / 1000");
+  });
+
   it("closes once the insight is added", async () => {
     const { onClose } = submitInsight(() => Promise.resolve());
 
