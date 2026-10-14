@@ -35,4 +35,17 @@ describe("insights", () => {
       screen.getByRole("heading", { name: "Insights" }),
     );
   });
+
+  it("shows markup in an insight as text instead of rendering it", () => {
+    const text = '<img src="x" onerror="alert(1)">';
+    const { container } = render(
+      <Insights
+        insights={[{ id: 1, brand: 1, createdAt: new Date(), text }]}
+        onDelete={() => undefined}
+      />,
+    );
+
+    expect(screen.getByText(text)).toBeInTheDocument();
+    expect(container.querySelector("img")).toBeNull();
+  });
 });
