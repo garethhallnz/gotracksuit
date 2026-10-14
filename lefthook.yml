@@ -1,0 +1,27 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.{ts,tsx,json,css}"
+      run: deno fmt --check {staged_files}
+    lint:
+      glob: "*.{ts,tsx}"
+      run: deno lint {staged_files}
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: deno check .
+    server-tests:
+      glob: "{server,lib}/**.ts"
+      run: deno task test:server
+    client-tests:
+      root: "client/src/"
+      glob: "*.{ts,tsx,css}"
+      run: cd .. && deno run -A --env-file=../.env npm:vitest related --run {staged_files}
+    client-tests-for-lib:
+      glob: "lib/**.ts"
+      run: deno task test:client
+
+pre-push:
+  commands:
+    tests:
+      run: deno task test

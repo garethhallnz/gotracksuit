@@ -60,6 +60,17 @@ deno task test:server
 deno task test:client
 ```
 
+### Git hooks
+
+```sh
+deno task hooks
+```
+
+Installs the [Lefthook](https://lefthook.dev) git hooks defined in
+`lefthook.yml`. Before each commit they check formatting, lint and types on the
+staged files and run the tests related to them; before each push they run the
+full test suite.
+
 ### Typechecking
 
 ```sh

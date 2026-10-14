@@ -11,7 +11,8 @@
     "dev:client": "cd client && deno task dev",
     "test": "deno task test:server && deno task test:client",
     "test:server": "cd server && deno task test",
-    "test:client": "cd client && deno task test"
+    "test:client": "cd client && deno task test",
+    "hooks": "deno run -A npm:lefthook@2.1.15 install"
   },
   "compilerOptions": {
     "strict": true,
