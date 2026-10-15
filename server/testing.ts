@@ -1,5 +1,5 @@
 import { Database } from "@db/sqlite";
-import * as insightsTable from "$tables/insights.ts";
+import * as insightsTable from "./tables/insights.ts";
 import { afterAll, beforeAll } from "@std/testing/bdd";
 
 type Fixture = {

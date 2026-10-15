@@ -1,7 +1,7 @@
 import type { Database } from "@db/sqlite";
 import type { Insight } from "@suittracker/lib/schemas/insight";
 import { log } from "../log.ts";
-import * as insightsTable from "$tables/insights.ts";
+import * as insightsTable from "../tables/insights.ts";
 
 export const lookupInsight = (
   db: Database,

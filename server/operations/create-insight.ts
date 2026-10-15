@@ -1,7 +1,7 @@
 import type { Database } from "@db/sqlite";
 import type { Insight, NewInsight } from "@suittracker/lib/schemas/insight";
 import { log } from "../log.ts";
-import * as insightsTable from "$tables/insights.ts";
+import * as insightsTable from "../tables/insights.ts";
 
 export const createInsight = (db: Database, insight: NewInsight): Insight => {
   log.debug(`Creating insight for brand=${insight.brand}`);
