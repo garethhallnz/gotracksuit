@@ -8,6 +8,20 @@ const createdAt = "2026-10-13T05:30:00.000Z";
 const request = (path: string, init?: RequestInit) =>
   new Request(`http://localhost${path}`, init);
 
+const expectError = async (
+  response: Response | undefined,
+  status: number,
+  body: Record<string, unknown>,
+) => {
+  expect(response?.status).toBe(status);
+  expect(await response?.json()).toEqual(body);
+};
+
+const INVALID_ID = {
+  message: "Insight id must be a non-negative whole number",
+};
+const NOT_FOUND = { message: "Insight not found" };
+
 describe("GET /insights/:id", () => {
   withDB((fixture) => {
     it("returns the insight, 404 for a missing id and 400 for an invalid one", async () => {
@@ -22,8 +36,16 @@ describe("GET /insights/:id", () => {
         createdAt,
         text: "Socks",
       });
-      expect((await app.handle(request("/insights/2")))?.status).toBe(404);
-      expect((await app.handle(request("/insights/abc")))?.status).toBe(400);
+      await expectError(
+        await app.handle(request("/insights/2")),
+        404,
+        NOT_FOUND,
+      );
+      await expectError(
+        await app.handle(request("/insights/abc")),
+        400,
+        INVALID_ID,
+      );
     });
   });
 });
@@ -47,25 +69,28 @@ describe("POST /insights", () => {
         text: "Don't do it",
       });
 
-      expect((await post({ brand: 2, text: "   " }))?.status).toBe(400);
+      await expectError(await post({ brand: 2, text: "   " }), 400, {
+        message: "Request body is invalid",
+        fieldErrors: { text: ["String must contain at least 1 character(s)"] },
+      });
 
       const formPost = await app.handle(request("/insights", {
         method: "POST",
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({ brand: 2, text: "From another site" }),
       }));
-      expect(formPost?.status).toBe(415);
+      await expectError(formPost, 415, {
+        message: "Request body must be JSON",
+      });
 
       const malformed = await app.handle(request("/insights", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: '{"brand": 2,',
       }));
-      expect(malformed?.status).toBe(400);
       expect(malformed?.headers.get("X-Content-Type-Options")).toBe("nosniff");
-      expect(await malformed?.json()).toEqual({
-        formErrors: ["Body must be valid JSON"],
-        fieldErrors: {},
+      await expectError(malformed, 400, {
+        message: "Request body must be valid JSON",
       });
       expect(fixture.insights.selectAll()).toHaveLength(1);
     });
@@ -99,8 +124,8 @@ describe("DELETE /insights/:id", () => {
         app.handle(request(`/insights/${id}`, { method: "DELETE" }));
 
       expect((await remove("1"))?.status).toBe(204);
-      expect((await remove("1"))?.status).toBe(404);
-      expect((await remove("abc"))?.status).toBe(400);
+      await expectError(await remove("1"), 404, NOT_FOUND);
+      await expectError(await remove("abc"), 400, INVALID_ID);
     });
   });
 });
