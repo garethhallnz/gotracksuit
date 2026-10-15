@@ -48,12 +48,14 @@ export const Modal = ({ open, onClose, title, children }: ModalProps) => {
     if (!open) return;
 
     const opener = document.activeElement;
-    const page = document.getElementById("root");
-    page?.setAttribute("inert", "");
+    const background = [...document.body.children].filter((element) =>
+      !element.contains(dialogRef.current) && !element.hasAttribute("inert")
+    );
+    background.forEach((element) => element.setAttribute("inert", ""));
     dialogRef.current?.focus();
 
     return () => {
-      page?.removeAttribute("inert");
+      background.forEach((element) => element.removeAttribute("inert"));
       if (opener instanceof HTMLElement) opener.focus();
     };
   }, [open]);

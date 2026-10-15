@@ -15,14 +15,6 @@ const ModalWithOpener = () => {
   );
 };
 
-const renderInPageRoot = () => {
-  const root = document.createElement("div");
-  root.id = "root";
-  document.body.appendChild(root);
-  render(<ModalWithOpener />, { container: root });
-  return root;
-};
-
 describe("Modal", () => {
   it("should open and close", () => {
     render(
@@ -49,14 +41,14 @@ describe("Modal", () => {
   });
 
   it("takes focus as a labelled dialog, isolates the page, and hands focus back on Escape", async () => {
-    const root = renderInPageRoot();
+    const { container: page } = render(<ModalWithOpener />);
     const opener = screen.getByRole("button", { name: "Open" });
     opener.focus();
     fireEvent.click(opener);
 
     const dialog = screen.getByRole("dialog", { name: "Title" });
     expect(dialog).toHaveFocus();
-    expect(root.hasAttribute("inert")).toBe(true);
+    expect(page).toHaveAttribute("inert");
 
     fireEvent.keyDown(dialog, { key: "Escape" });
 
@@ -64,6 +56,6 @@ describe("Modal", () => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
     );
     expect(opener).toHaveFocus();
-    expect(root.hasAttribute("inert")).toBe(false);
+    expect(page).not.toHaveAttribute("inert");
   });
 });
