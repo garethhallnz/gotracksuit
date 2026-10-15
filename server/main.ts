@@ -1,6 +1,6 @@
 import { Database } from "@db/sqlite";
 import * as path from "@std/path";
-import { Port } from "@suittracker/lib";
+import { readServerPort } from "@suittracker/lib";
 import { createApp } from "./app.ts";
 import * as insightsTable from "./tables/insights.ts";
 import { log } from "./log.ts";
@@ -8,7 +8,7 @@ import { log } from "./log.ts";
 log.info("Loading configuration");
 
 const env = {
-  port: Port.parse(Deno.env.get("SERVER_PORT")),
+  port: readServerPort(),
 };
 
 const dbFilePath = path.resolve("tmp", "db.sqlite3");

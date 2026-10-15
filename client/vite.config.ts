@@ -1,14 +1,18 @@
 import deno from "@deno/vite-plugin";
-import { BaseUrl, Port } from "@suittracker/lib";
+import {
+  readClientPort,
+  readServerBaseUrl,
+  readServerPort,
+} from "@suittracker/lib";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin, searchForWorkspaceRoot } from "vite";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 const env = {
-  clientPort: Port.parse(Deno.env.get("CLIENT_PORT")),
-  serverBaseUrl: BaseUrl.parse(Deno.env.get("SERVER_BASE_URL")),
-  serverPort: Port.parse(Deno.env.get("SERVER_PORT")),
+  clientPort: readClientPort(),
+  serverBaseUrl: readServerBaseUrl(),
+  serverPort: readServerPort(),
 };
 
 const libDir = fileURLToPath(new URL("../lib", import.meta.url));
