@@ -1,3 +1,4 @@
+import { AddInsightButton } from "../components/add-insight/add-insight-button.tsx";
 import { Button } from "../components/button/button.tsx";
 import { Header } from "../components/header/header.tsx";
 import { Insights } from "../components/insights/insights.tsx";
@@ -17,7 +18,7 @@ export const App = () => {
 
   return (
     <main className={styles.main}>
-      <Header onAddInsight={addInsight} />
+      <Header actions={<AddInsightButton onAdd={addInsight} />} />
       {status === "loading" && (
         <p role="status" className={styles.loading}>Loading insights…</p>
       )}

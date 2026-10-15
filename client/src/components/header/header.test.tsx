@@ -4,9 +4,7 @@ import { render } from "@testing-library/react";
 
 describe("header", () => {
   it("renders", () => {
-    const { getByText } = render(
-      <Header onAddInsight={() => Promise.resolve()} />,
-    );
+    const { getByText } = render(<Header />);
     expect(getByText(HEADER_TEXT)).toBeInTheDocument();
   });
 });
