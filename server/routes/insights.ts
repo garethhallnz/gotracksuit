@@ -3,10 +3,10 @@ import * as oak from "@oak/oak";
 import { InsightId, NewInsight } from "@suittracker/lib/schemas/insight";
 import type { ApiError } from "../http/api-error.ts";
 import { readJsonBody } from "../http/read-json-body.ts";
-import createInsight from "../operations/create-insight.ts";
-import deleteInsight from "../operations/delete-insight.ts";
-import listInsights from "../operations/list-insights.ts";
-import lookupInsight from "../operations/lookup-insight.ts";
+import { createInsight } from "../operations/create-insight.ts";
+import { deleteInsight } from "../operations/delete-insight.ts";
+import { listInsights } from "../operations/list-insights.ts";
+import { lookupInsight } from "../operations/lookup-insight.ts";
 
 const INVALID_ID: ApiError = {
   message: "Insight id must be a non-negative whole number",
@@ -28,7 +28,7 @@ export const createInsightsRouter = (db: Database) => {
   });
 
   router.get("/insights", (ctx) => {
-    const result = listInsights({ db });
+    const result = listInsights(db);
     ctx.response.body = result;
     ctx.response.status = 200;
   });
@@ -36,7 +36,7 @@ export const createInsightsRouter = (db: Database) => {
   router.get("/insights/:id", (ctx) => {
     const id = InsightId.parse(ctx.params.id);
 
-    const result = lookupInsight({ db, id });
+    const result = lookupInsight(db, id);
     if (!result) {
       ctx.response.body = NOT_FOUND;
       ctx.response.status = 404;
@@ -55,7 +55,7 @@ export const createInsightsRouter = (db: Database) => {
       return;
     }
 
-    const result = createInsight({ db, ...input.data });
+    const result = createInsight(db, input.data);
     ctx.response.body = result;
     ctx.response.status = 201;
   });
@@ -63,7 +63,7 @@ export const createInsightsRouter = (db: Database) => {
   router.delete("/insights/:id", (ctx) => {
     const id = InsightId.parse(ctx.params.id);
 
-    const isDeleted = deleteInsight({ db, id });
+    const isDeleted = deleteInsight(db, id);
     if (!isDeleted) {
       ctx.response.body = NOT_FOUND;
       ctx.response.status = 404;

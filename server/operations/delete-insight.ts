@@ -1,20 +1,16 @@
-import type { HasDBClient } from "../shared.ts";
+import type { Database } from "@db/sqlite";
 import { log } from "../log.ts";
 
-type Input = HasDBClient & {
-  id: number;
-};
+export const deleteInsight = (db: Database, id: number): boolean => {
+  log.debug(`Deleting insight id=${id}`);
 
-export default (input: Input): boolean => {
-  log.debug(`Deleting insight id=${input.id}`);
-
-  const changes = input.db.exec("DELETE FROM insights WHERE id = ?", input.id);
+  const changes = db.exec("DELETE FROM insights WHERE id = ?", id);
 
   if (changes > 0) {
-    log.info(`Deleted insight id=${input.id}`);
+    log.info(`Deleted insight id=${id}`);
     return true;
   }
 
-  log.debug(`No insight to delete for id=${input.id}`);
+  log.debug(`No insight to delete for id=${id}`);
   return false;
 };

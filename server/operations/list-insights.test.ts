@@ -2,7 +2,7 @@ import { expect } from "@std/expect";
 import { beforeAll, describe, it } from "@std/testing/bdd";
 import type { Insight } from "@suittracker/lib/schemas/insight";
 import { withDB } from "../testing.ts";
-import listInsights from "./list-insights.ts";
+import { listInsights } from "./list-insights.ts";
 
 describe("listing insights in the database", () => {
   describe("nothing in the DB", () => {
@@ -10,7 +10,7 @@ describe("listing insights in the database", () => {
       let result: Insight[];
 
       beforeAll(() => {
-        result = listInsights(fixture);
+        result = listInsights(fixture.db);
       });
 
       it("returns empty result", () => {
@@ -37,7 +37,7 @@ describe("listing insights in the database", () => {
             createdAt: it.createdAt.toISOString(),
           })),
         );
-        result = listInsights(fixture);
+        result = listInsights(fixture.db);
       });
 
       it("returns non-empty result", () => {

@@ -1,18 +1,16 @@
+import type { Database } from "@db/sqlite";
 import type { Insight, NewInsight } from "@suittracker/lib/schemas/insight";
-import type { HasDBClient } from "../shared.ts";
-import * as insightsTable from "$tables/insights.ts";
 import { log } from "../log.ts";
+import * as insightsTable from "$tables/insights.ts";
 
-type Input = HasDBClient & NewInsight;
-
-export default (input: Input): Insight => {
-  log.debug(`Creating insight for brand=${input.brand}`);
+export const createInsight = (db: Database, insight: NewInsight): Insight => {
+  log.debug(`Creating insight for brand=${insight.brand}`);
 
   const createdAt = new Date();
 
-  const [row] = input.db.sql<insightsTable.Row>`
+  const [row] = db.sql<insightsTable.Row>`
     INSERT INTO insights (brand, createdAt, text)
-    VALUES (${input.brand}, ${createdAt.toISOString()}, ${input.text})
+    VALUES (${insight.brand}, ${createdAt.toISOString()}, ${insight.text})
     RETURNING *
   `;
 

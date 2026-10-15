@@ -2,7 +2,7 @@ import { beforeAll, describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { withDB } from "../testing.ts";
 import type { Insight } from "@suittracker/lib/schemas/insight";
-import lookupInsight from "./lookup-insight.ts";
+import { lookupInsight } from "./lookup-insight.ts";
 
 describe("looking up an insight in the database", () => {
   describe("specified insight not in the DB", () => {
@@ -10,7 +10,7 @@ describe("looking up an insight in the database", () => {
       let result: Insight | undefined;
 
       beforeAll(() => {
-        result = lookupInsight({ ...fixture, id: 0 });
+        result = lookupInsight(fixture.db, 0);
       });
 
       it("returns nothing", () => {
@@ -37,7 +37,7 @@ describe("looking up an insight in the database", () => {
             createdAt: it.createdAt.toISOString(),
           })),
         );
-        result = lookupInsight({ ...fixture, id: 3 });
+        result = lookupInsight(fixture.db, 3);
       });
 
       it("returns the expected insight", () => {

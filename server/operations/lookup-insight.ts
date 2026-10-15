@@ -1,26 +1,24 @@
+import type { Database } from "@db/sqlite";
 import type { Insight } from "@suittracker/lib/schemas/insight";
-import type { HasDBClient } from "../shared.ts";
-import * as insightsTable from "$tables/insights.ts";
 import { log } from "../log.ts";
+import * as insightsTable from "$tables/insights.ts";
 
-type Input = HasDBClient & {
-  id: number;
-};
+export const lookupInsight = (
+  db: Database,
+  id: number,
+): Insight | undefined => {
+  log.debug(`Looking up insight id=${id}`);
 
-export default (input: Input): Insight | undefined => {
-  log.debug(`Looking up insight id=${input.id}`);
-
-  const [row] = input.db
-    .sql<
-    insightsTable.Row
-  >`SELECT * FROM insights WHERE id = ${input.id} LIMIT 1`;
+  const [row] = db.sql<insightsTable.Row>`
+    SELECT * FROM insights WHERE id = ${id} LIMIT 1
+  `;
 
   if (row) {
     const result = insightsTable.toInsight(row);
-    log.debug(`Found insight id=${input.id}`);
+    log.debug(`Found insight id=${id}`);
     return result;
   }
 
-  log.debug(`No insight found for id=${input.id}`);
+  log.debug(`No insight found for id=${id}`);
   return;
 };

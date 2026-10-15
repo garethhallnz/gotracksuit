@@ -1,14 +1,12 @@
+import type { Database } from "@db/sqlite";
 import type { Insight } from "@suittracker/lib/schemas/insight";
-import type { HasDBClient } from "../shared.ts";
-import * as insightsTable from "$tables/insights.ts";
 import { log } from "../log.ts";
+import * as insightsTable from "$tables/insights.ts";
 
-type Input = HasDBClient;
-
-export default (input: Input): Insight[] => {
+export const listInsights = (db: Database): Insight[] => {
   log.debug("Listing insights");
 
-  const rows = input.db.sql<insightsTable.Row>`
+  const rows = db.sql<insightsTable.Row>`
     SELECT * FROM insights ORDER BY createdAt DESC, id DESC
   `;
 

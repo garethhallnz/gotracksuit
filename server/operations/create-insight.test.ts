@@ -2,7 +2,7 @@ import { expect } from "@std/expect";
 import { beforeAll, describe, it } from "@std/testing/bdd";
 import type { Insight } from "@suittracker/lib/schemas/insight";
 import { withDB } from "../testing.ts";
-import createInsight from "./create-insight.ts";
+import { createInsight } from "./create-insight.ts";
 
 describe("creating an insight", () => {
   withDB((fixture) => {
@@ -10,7 +10,7 @@ describe("creating an insight", () => {
     let result: Insight;
 
     beforeAll(() => {
-      result = createInsight({ ...fixture, brand: 2, text });
+      result = createInsight(fixture.db, { brand: 2, text });
     });
 
     it("stores the insight and returns it as stored", () => {
