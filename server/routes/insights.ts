@@ -17,6 +17,16 @@ const NOT_FOUND: ApiError = { message: "Insight not found" };
 export const createInsightsRouter = (db: Database) => {
   const router = new oak.Router();
 
+  router.param("id", async (id, ctx, next) => {
+    if (!InsightId.safeParse(id).success) {
+      ctx.response.body = INVALID_ID;
+      ctx.response.status = 400;
+      return;
+    }
+
+    await next();
+  });
+
   router.get("/insights", (ctx) => {
     const result = listInsights({ db });
     ctx.response.body = result;
@@ -24,14 +34,9 @@ export const createInsightsRouter = (db: Database) => {
   });
 
   router.get("/insights/:id", (ctx) => {
-    const id = InsightId.safeParse(ctx.params.id);
-    if (!id.success) {
-      ctx.response.body = INVALID_ID;
-      ctx.response.status = 400;
-      return;
-    }
+    const id = InsightId.parse(ctx.params.id);
 
-    const result = lookupInsight({ db, id: id.data });
+    const result = lookupInsight({ db, id });
     if (!result) {
       ctx.response.body = NOT_FOUND;
       ctx.response.status = 404;
@@ -56,14 +61,9 @@ export const createInsightsRouter = (db: Database) => {
   });
 
   router.delete("/insights/:id", (ctx) => {
-    const id = InsightId.safeParse(ctx.params.id);
-    if (!id.success) {
-      ctx.response.body = INVALID_ID;
-      ctx.response.status = 400;
-      return;
-    }
+    const id = InsightId.parse(ctx.params.id);
 
-    const isDeleted = deleteInsight({ db, id: id.data });
+    const isDeleted = deleteInsight({ db, id });
     if (!isDeleted) {
       ctx.response.body = NOT_FOUND;
       ctx.response.status = 404;
