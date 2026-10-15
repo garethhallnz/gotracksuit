@@ -1,7 +1,6 @@
 import { Trash2Icon } from "lucide-react";
 import { useRef } from "react";
 import { BRANDS } from "../../lib/consts.ts";
-import { cx } from "../../lib/cx.ts";
 import { InlineConfirm } from "../inline-confirm/inline-confirm.tsx";
 // @ts-types="../../types/css-module.d.ts"
 import styles from "./insights.module.css";
@@ -33,7 +32,7 @@ export const Insights = (
   };
 
   return (
-    <div className={cx(className)}>
+    <div className={className}>
       <h1 ref={headingRef} tabIndex={-1} className={styles.heading}>
         Insights
       </h1>

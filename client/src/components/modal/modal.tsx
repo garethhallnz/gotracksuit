@@ -3,7 +3,6 @@ import { XIcon } from "lucide-react";
 import type { KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
-import { cx } from "../../lib/cx.ts";
 // @ts-types="../../types/css-module.d.ts"
 import styles from "./modal.module.css";
 
@@ -83,7 +82,7 @@ export const Modal = ({ open, onClose, title, children }: ModalProps) => {
               aria-modal="true"
               aria-labelledby={titleId}
               tabIndex={-1}
-              className={cx(styles.modal)}
+              className={styles.modal}
               variants={ANIMATIONS.modal}
               onClick={(e) => {
                 e.stopPropagation();
@@ -99,7 +98,7 @@ export const Modal = ({ open, onClose, title, children }: ModalProps) => {
                 <XIcon aria-hidden />
               </button>
 
-              <div className={cx(styles.content)}>
+              <div>
                 <h1 id={titleId} className={styles.title}>{title}</h1>
                 {children}
               </div>
