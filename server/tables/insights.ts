@@ -2,7 +2,7 @@ import type { Insight } from "@suittracker/lib/schemas/insight";
 
 export const createTable = `
   CREATE TABLE IF NOT EXISTS insights (
-    id INTEGER PRIMARY KEY ASC NOT NULL,
+    id INTEGER PRIMARY KEY ASC AUTOINCREMENT NOT NULL,
     brand INTEGER NOT NULL,
     createdAt TEXT NOT NULL,
     text TEXT NOT NULL

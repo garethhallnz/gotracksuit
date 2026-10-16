@@ -149,3 +149,28 @@ describe("DELETE /insights/:id", () => {
     });
   });
 });
+
+describe("DELETE /insights/:id repeated after a newer insight is added", () => {
+  withDB((fixture) => {
+    it("leaves the newer insight alone", async () => {
+      const app = createApp(fixture.db);
+      const post = (text: string) =>
+        app.handle(request("/insights", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ brand: 1, text }),
+        }));
+      const removeFirst = () =>
+        app.handle(request("/insights/1", { method: "DELETE" }));
+
+      await post("Old");
+      await removeFirst();
+      await post("New");
+
+      await expectError(await removeFirst(), 404, NOT_FOUND);
+      expect(fixture.insights.selectAll().map(({ text }) => text)).toEqual([
+        "New",
+      ]);
+    });
+  });
+});
