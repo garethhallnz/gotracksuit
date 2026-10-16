@@ -1,3 +1,4 @@
+// @ts-types="@types/react"
 import type { ComponentProps } from "react";
 import { cx } from "../../lib/cx.ts";
 // @ts-types="../../types/css-module.d.ts"

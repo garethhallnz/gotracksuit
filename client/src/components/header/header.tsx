@@ -1,3 +1,4 @@
+// @ts-types="@types/react"
 import type { ReactNode } from "react";
 // @ts-types="../../types/css-module.d.ts"
 import styles from "./header.module.css";

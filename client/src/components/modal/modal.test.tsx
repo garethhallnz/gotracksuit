@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+// @ts-types="@types/react"
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Modal } from "./modal.tsx";

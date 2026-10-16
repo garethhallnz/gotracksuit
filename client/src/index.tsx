@@ -1,3 +1,4 @@
+// @ts-types="@types/react-dom/client"
 import { createRoot } from "react-dom/client";
 import { App } from "./routes/app.tsx";
 import "./styles/index.ts";

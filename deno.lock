@@ -34,6 +34,7 @@
     "npm:@testing-library/jest-dom@^6.6.3": "6.6.3",
     "npm:@testing-library/react@^16.1.0": "16.1.0_@testing-library+dom@10.4.0_@types+react@19.0.2_react@19.0.0_react-dom@19.0.0__react@19.0.0",
     "npm:@types/node@*": "22.5.4",
+    "npm:@types/react-dom@~19.0.2": "19.0.6_@types+react@19.0.2",
     "npm:@types/react@^19.0.2": "19.0.2",
     "npm:@vitejs/plugin-react@^4.3.4": "4.3.4_vite@6.0.3_@babel+core@7.26.0",
     "npm:framer-motion@^11.15.0": "11.15.0_react@19.0.0_react-dom@19.0.0__react@19.0.0",
@@ -569,6 +570,12 @@
       "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
       "dependencies": [
         "undici-types"
+      ]
+    },
+    "@types/react-dom@19.0.6_@types+react@19.0.2": {
+      "integrity": "sha512-lo6MuY+rFr8kIiFnr+7TzO+Av0wUPcEcepiPV4epGP0eTQpkDfp9czudg73isV8UxKauCUNlL1N8fXhcnx4iBw==",
+      "dependencies": [
+        "@types/react"
       ]
     },
     "@types/react@19.0.2": {
@@ -1309,6 +1316,7 @@
           "npm:@testing-library/dom@^10.4.0",
           "npm:@testing-library/jest-dom@^6.6.3",
           "npm:@testing-library/react@^16.1.0",
+          "npm:@types/react-dom@~19.0.2",
           "npm:@types/react@^19.0.2",
           "npm:@vitejs/plugin-react@^4.3.4",
           "npm:framer-motion@^11.15.0",

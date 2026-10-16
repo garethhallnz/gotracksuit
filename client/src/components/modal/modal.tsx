@@ -1,7 +1,10 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { XIcon } from "lucide-react";
+// @ts-types="@types/react"
 import type { KeyboardEvent, ReactNode } from "react";
+// @ts-types="@types/react"
 import { useEffect, useId, useRef } from "react";
+// @ts-types="@types/react-dom"
 import { createPortal } from "react-dom";
 // @ts-types="../../types/css-module.d.ts"
 import styles from "./modal.module.css";

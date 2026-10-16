@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+// @ts-types="@types/react"
 import {
   type KeyboardEvent,
   type ReactNode,
@@ -6,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+// @ts-types="@types/react-dom"
 import { flushSync } from "react-dom";
 import { cx } from "../../lib/cx.ts";
 import { Button } from "../button/button.tsx";

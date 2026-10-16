@@ -1,3 +1,4 @@
+// @ts-types="@types/react"
 import { useState } from "react";
 import type { NewInsight } from "@suittracker/lib/schemas/insight";
 import { Button } from "../button/button.tsx";

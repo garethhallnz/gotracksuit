@@ -1,3 +1,4 @@
+// @ts-types="@types/react"
 import { useEffect, useState } from "react";
 import type { Insight, NewInsight } from "@suittracker/lib/schemas/insight";
 import * as insightRequests from "../requests/insights.ts";

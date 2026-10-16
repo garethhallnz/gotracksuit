@@ -1,3 +1,4 @@
+// @ts-types="@types/react"
 import { type FormEvent, useId, useState } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { HttpError } from "../../lib/request.ts";

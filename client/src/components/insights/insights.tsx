@@ -1,4 +1,5 @@
 import { Trash2Icon } from "lucide-react";
+// @ts-types="@types/react"
 import { useRef } from "react";
 import { BRANDS } from "../../lib/consts.ts";
 import { InlineConfirm } from "../inline-confirm/inline-confirm.tsx";
