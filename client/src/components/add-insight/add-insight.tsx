@@ -32,6 +32,11 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
     props.onClose();
   };
 
+  const dismiss = () => {
+    if (isSubmitting) return;
+    close();
+  };
+
   const addInsight = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isSubmitting) return;
@@ -48,7 +53,7 @@ export const AddInsight = ({ onAdd, ...props }: AddInsightProps) => {
   };
 
   return (
-    <Modal {...props} title="Add a new insight" onClose={close}>
+    <Modal {...props} title="Add a new insight" onClose={dismiss}>
       <form className={styles.form} onSubmit={addInsight}>
         <label className={styles.field}>
           Brand

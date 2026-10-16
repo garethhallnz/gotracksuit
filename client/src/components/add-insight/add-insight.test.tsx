@@ -47,6 +47,16 @@ describe("AddInsight", () => {
     expect(onAdd).toHaveBeenCalledOnce();
   });
 
+  it("can't be closed while the insight is being added", () => {
+    const { onClose } = submitInsight(() => new Promise<void>(() => {}));
+
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+    fireEvent.click(screen.getByTestId("overlay"));
+
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("stays open with the text kept when saving fails", async () => {
     const { onClose } = submitInsight(() => Promise.reject(new HttpError(500)));
 
