@@ -115,6 +115,26 @@ describe("POST /insights text length", () => {
   });
 });
 
+describe("POST /insights brand range", () => {
+  withDB((fixture) => {
+    it("accepts the largest brand id the database reads back intact and rejects larger ones", async () => {
+      const app = createApp(fixture.db);
+      const post = (brand: number) =>
+        app.handle(request("/insights", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ brand, text: "Socks" }),
+        }));
+
+      const largest = await post(2 ** 31 - 1);
+      expect(largest?.status).toBe(201);
+      expect(await largest?.json()).toMatchObject({ brand: 2 ** 31 - 1 });
+      expect((await post(2 ** 31))?.status).toBe(400);
+      expect(fixture.insights.selectAll()).toHaveLength(1);
+    });
+  });
+});
+
 describe("DELETE /insights/:id", () => {
   withDB((fixture) => {
     it("deletes an insight, then returns 404, and rejects an invalid id", async () => {
