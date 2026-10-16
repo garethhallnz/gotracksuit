@@ -1,5 +1,5 @@
 // @ts-types="@types/react"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Insight, NewInsight } from "@suittracker/lib/schemas/insight";
 import * as insightRequests from "../requests/insights.ts";
 
@@ -9,15 +9,24 @@ export const useInsights = () => {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [status, setStatus] = useState<Status>("loading");
   const [hasDeleteFailed, setHasDeleteFailed] = useState(false);
+  const latestLoad = useRef(0);
 
-  const loadInsights = () =>
-    insightRequests.fetchInsights()
+  const loadInsights = () => {
+    const load = ++latestLoad.current;
+    const isLatest = () => load === latestLoad.current;
+
+    return insightRequests.fetchInsights()
       .then((data) => {
+        if (!isLatest()) return;
         setInsights(data);
         setStatus("ready");
         setHasDeleteFailed(false);
       })
-      .catch(() => setStatus("load-failed"));
+      .catch(() => {
+        if (!isLatest()) return;
+        setStatus("load-failed");
+      });
+  };
 
   const retryLoad = () => {
     setStatus("loading");

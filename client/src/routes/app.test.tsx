@@ -1,4 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { App } from "./app.tsx";
 
@@ -103,5 +109,39 @@ describe("App", () => {
       "Couldn't delete the insight. Please try again.",
     );
     expect(screen.getByText(INSIGHT.text)).toBeInTheDocument();
+  });
+
+  it("ignores a list reload that finishes after a newer one", async () => {
+    const insightB = { ...INSIGHT, id: 2, text: "Wide lapels" };
+    const lateReload = Promise.withResolvers<Response>();
+    const fetch = vi.fn();
+    [
+      Promise.resolve(json([INSIGHT, insightB])),
+      Promise.resolve(status(204)),
+      lateReload.promise,
+      Promise.resolve(status(204)),
+      Promise.resolve(json([])),
+    ].forEach((response) => fetch.mockReturnValueOnce(response));
+    vi.stubGlobal("fetch", fetch);
+    render(<App />);
+
+    const [deleteA] = await screen.findAllByRole("button", {
+      name: "Delete insight",
+    });
+    fireEvent.click(deleteA);
+    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(3));
+
+    const [, deleteB] = screen.getAllByRole("button", {
+      name: "Delete insight",
+    });
+    fireEvent.click(deleteB);
+    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    expect(await screen.findByText("We have no insight!")).toBeInTheDocument();
+
+    lateReload.resolve(json([insightB]));
+    await act(() => lateReload.promise);
+
+    expect(screen.queryByText(insightB.text)).not.toBeInTheDocument();
   });
 });
