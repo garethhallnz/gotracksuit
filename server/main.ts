@@ -11,7 +11,9 @@ const env = {
   port: readServerPort(),
 };
 
-const dbFilePath = path.resolve("tmp", "db.sqlite3");
+const dbFilePath = path.fromFileUrl(
+  new URL("tmp/db.sqlite3", import.meta.url),
+);
 
 log.info(`Opening SQLite database at ${dbFilePath}`);
 
