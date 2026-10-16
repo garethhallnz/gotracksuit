@@ -32,4 +32,25 @@ describe("request", () => {
     expect(error).toBeInstanceOf(HttpError);
     expect(error.isClientError).toBe(false);
   });
+
+  it("gives up on a request that gets no response within 10 seconds", async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((_input: string, init?: RequestInit) =>
+        new Promise((_resolve, reject) =>
+          init?.signal?.addEventListener(
+            "abort",
+            () => reject(init.signal?.reason),
+          )
+        )
+      ),
+    );
+
+    const result = request("/thing").catch((error) => error);
+    await vi.advanceTimersByTimeAsync(10_000);
+
+    expect(await result).toHaveProperty("name", "TimeoutError");
+    vi.useRealTimers();
+  });
 });
